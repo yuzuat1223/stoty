@@ -1,0 +1,37 @@
+<!-- bgm.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <audio id="bgm" src="bgm1.mp3" autoplay loop></audio>
+
+  <script>
+    // 自動播放支援不佳，因此加上使用者互動觸發
+    document.addEventListener('click', () => {
+      const audio = document.getElementById('bgm');
+      if (audio.paused) {
+        audio.play().catch(err => console.log('播放失敗：', err));
+      }
+    });
+
+    // 有些瀏覽器需要額外的 load/play 嘗試
+    window.addEventListener('load', () => {
+      const audio = document.getElementById('bgm');
+      audio.play().catch(err => {
+        console.log('背景音樂無法自動播放，等待使用者互動');
+      });
+    });
+
+    window.addEventListener('message', (event) => {
+    if (event.data === 'playBGM') {
+      const audio = document.getElementById('bgm');
+      if (audio.paused) {
+        audio.play().catch(() => {});
+      }
+    }
+  });
+  </script>
+</body>
+</html>
